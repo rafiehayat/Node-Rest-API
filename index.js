@@ -10,21 +10,21 @@ const authRoute = require("./routes/auth");
 dotenv.config();
 
 mongoose.set("strictQuery", false);
-mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("Connected to MongoDB");
-  }
-);
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("connected to MongoDb"))
+  .catch((e) => console.log(e));
 
 //middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
+app.use("/api/auth", authRoute);
 
 app.listen(5000, () => {
   console.log("Backend server is running");
